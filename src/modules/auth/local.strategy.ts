@@ -1,22 +1,23 @@
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, IStrategyOptions } from 'passport-local';
-import { User } from 'src/modules/user/entity/user.entity';
-import { Repository } from 'typeorm';
+import { AuthService } from './auth.service';
 
+@Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>
-  ) {
+  constructor(private readonly authService: AuthService) {
+    /**
+     *  PassportStrategy默认接受的参数字段名username、password
+     *  可以自行修改
+     * */
     super({
       usernameField:'username',
       passwordField:'password',
     } as IStrategyOptions);
   }
 
+  // 自定义本地策略校验逻辑
   async validate(username:string, password:string) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
+    return await this.authService.validateUser(username, password);
   }
 }

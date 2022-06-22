@@ -26,7 +26,6 @@ export class User {
   @Column({
     name: 'create_time',
     type: 'timestamp',
-    default: new Date().valueOf(),
   })
   createTime: Date;
 

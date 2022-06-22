@@ -1,19 +1,15 @@
-import { Controller, Get, Post, Delete, Req, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Req, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
-export class AppController {
+@UseGuards(AuthGuard('jwt'))
+export class UserController {
   constructor(private readonly service: UserService) {}
 
-  @Get('login')
-  login(@Query() loginAccount) {
-    console.log('login params', loginAccount);
-    return this.service.getHello();
-  }
-
-  @Get('logout')
-  logout() {
-    return this.service.getHello();
+  @Post('login')
+  async login(@Body() params) {
+    return this.service.getHello(params);
   }
 
   @Post('updatePassword')

@@ -7,13 +7,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const status = exception.getStatus();
     const exceptionRes: any = exception.getResponse();
+    let message = exceptionRes.message;
     console.log(exception);
-    
+
+    if(status === 401) {
+      message = '身份过期，请重新登录';
+    }
+
     response
       .status(200)
       .json({
         code:status,
-        msg:exceptionRes
+        data:null,
+        msg:message
       })
   }
 }
