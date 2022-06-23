@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import * as DayJS from 'dayjs';
 
 @Entity()
 export class User {
@@ -11,22 +12,19 @@ export class User {
   @Column()
   password:string;
 
-  @Column()
+  @Column({default: null})
   avatar:string;
 
-  @Column()
+  @Column({default: null})
   tag:string;
 
-  @Column({default:'off'})
-  status:string
+  @Column({ default: '0' })
+  online:string
 
-  @Column()
-  role:string;
+  @Column({default: null})
+  roleId:string;
 
-  @Column({
-    name: 'create_time',
-    type: 'timestamp',
-  })
+  @Column({default:DayJS().format('YYYY-MM-DD HH:mm:ss')})
   createTime: Date;
 
 }

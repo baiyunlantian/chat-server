@@ -13,9 +13,8 @@ export class AuthController {
     return this.authService.login(req);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('register')
-  async register(@Param() req) {
+  @Post('register')
+  async register(@Body() req) {
     return this.authService.register(req);
   }
 }

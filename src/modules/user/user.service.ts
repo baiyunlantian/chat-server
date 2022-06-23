@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
 
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-
-  ) {
-  }
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
   getHello(params?:any) {
     console.log('getHello', params)
     if (params.username === 'yzh') {
@@ -28,10 +25,7 @@ export class UserService {
     }
   }
 
-  async findOne(username:string, password:string) {
-    const user = await this.userRepository.find({username:username})
-
-    console.log('findOne', user)
-    return user;
+  async findOneByUsername(username:string) {
+    return await this.userRepository.findOne({username});
   }
 }
