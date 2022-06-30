@@ -19,6 +19,7 @@ export class AuthService {
 
     const payload = {username:userInfo.username, sub: userInfo.userId};
     return {
+      code:200,
       msg:'登陆成功',
       data:{
         access_token:this.jwtService.sign(payload),

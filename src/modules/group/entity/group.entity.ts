@@ -12,8 +12,8 @@ export class Group {
   @Column()
   groupName:string
 
-  @Column()
-  notice:string
+  @Column({ default: 0 })
+  notice:number
 
   @Column({default: DayJS().format('YYYY-MM-DD HH:mm:ss')})
   createTime:Date

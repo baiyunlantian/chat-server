@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Like, Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { createWriteStream, createReadStream } from "fs";
 import { join } from "path";
@@ -35,13 +35,7 @@ export class UserService {
       }, HttpStatus.BAD_REQUEST)
     }
 
-    const user = await this.userRepository.findOne({userId});
-    if (!user) {
-      throw new HttpException({
-        statusCode:HttpStatus.BAD_REQUEST,
-        message:'用户不存在!'
-      }, HttpStatus.BAD_REQUEST)
-    }
+    const user = await this.findOneByUserId(userId);
 
     const random = Date.now() + '&';
     const stream = createWriteStream(join('public/avatar', random + file.originalname));
@@ -51,8 +45,46 @@ export class UserService {
     return { msg: '修改头像成功', data: user};
   }
 
+  async updateInfo(param: User) {
+    const {userId, username, password} = param;
+    const user = await this.findOneByUserId(userId);
+    user.username = username;
+    user.password = password;
+    await this.userRepository.save(user);
+
+    return { msg: '修改用户信息成功', data: user};
+  }
+
+  async findOneByUserId(userId:string) {
+    const user = await this.userRepository.findOne({userId});
+    if (!user) {
+      throw new HttpException({
+        statusCode:HttpStatus.BAD_REQUEST,
+        message:'用户不存在!'
+      }, HttpStatus.BAD_REQUEST)
+    }
+    return user;
+  }
 
   async findOneByUsername(username:string) {
-    return await this.userRepository.findOne({username});
+    const user = await this.userRepository.findOne({username});
+    if (!user) {
+      throw new HttpException({
+        statusCode:HttpStatus.BAD_REQUEST,
+        message:'用户不存在!'
+      }, HttpStatus.BAD_REQUEST)
+    }
+    return user;
+  }
+
+  // 通过username模糊查询
+  async findListByUsername(username:string) {
+    const list = await this.userRepository.find({
+      username: Like(`%${username}%`)
+    });
+    return {
+      msg:'',
+      data:list
+    }
   }
 }
