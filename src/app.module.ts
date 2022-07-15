@@ -4,6 +4,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { GroupModule } from './modules/group/group.module';
 import { AvatarModule } from './modules/avatar/avatar.module';
+import { FriendModule } from './modules/friend/friend.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AvatarModule } from './modules/avatar/avatar.module';
     AuthModule,
     GroupModule,
     AvatarModule,
+    FriendModule,
+    ChatModule
   ],
 })
 export class AppModule {}

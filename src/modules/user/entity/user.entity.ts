@@ -9,7 +9,7 @@ export class User {
   @Column()
   username:string;
 
-  @Column()
+  @Column({ select: false })
   password:string;
 
   @Column({default: null})
@@ -24,7 +24,7 @@ export class User {
   @Column({default: null})
   roleId:string;
 
-  @Column({default:DayJS().format('YYYY-MM-DD HH:mm:ss')})
-  createTime: Date;
+  @Column({type: 'double',default: new Date().valueOf()})
+  createTime: number;
 
 }

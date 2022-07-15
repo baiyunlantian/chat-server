@@ -33,8 +33,8 @@ export class UserController {
   }
 
   @Post('findListByUsername')
-  findListByUsername(@Body('username') username:string) {
-    return this.userService.findListByUsername(username);
+  findListByUsername(@Body() params) {
+    return this.userService.findListByUsername(params);
   }
 
   @Get('findByName')

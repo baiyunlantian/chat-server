@@ -15,6 +15,12 @@ export class AuthService {
 
   async login(param: User) {
     const user:User = await this.userService.findOneByUsername(param.username);
+    if (!user) {
+      throw new HttpException({
+        statusCode:HttpStatus.BAD_REQUEST,
+        message:'用户不存在!'
+      }, HttpStatus.BAD_REQUEST)
+    }
     const { password, ...userInfo } = user
 
     const payload = {username:userInfo.username, sub: userInfo.userId};

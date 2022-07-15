@@ -68,23 +68,24 @@ export class UserService {
 
   async findOneByUsername(username:string) {
     const user = await this.userRepository.findOne({username});
-    if (!user) {
-      throw new HttpException({
-        statusCode:HttpStatus.BAD_REQUEST,
-        message:'用户不存在!'
-      }, HttpStatus.BAD_REQUEST)
-    }
     return user;
   }
 
   // 通过username模糊查询
-  async findListByUsername(username:string) {
+  async findListByUsername(params:any) {
+    const {username, userId} = params
+    if (!username) {
+      return {
+        msg:'',
+        data:[]
+      }
+    }
     const list = await this.userRepository.find({
       username: Like(`%${username}%`)
     });
     return {
       msg:'',
-      data:list
+      data:list.filter(user=>user.userId !== userId)
     }
   }
 }

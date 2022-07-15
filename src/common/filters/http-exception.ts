@@ -3,7 +3,7 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
-    console.log(exception);
+    console.log('exception', exception);
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -19,15 +19,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       msg = '服务器异常';
     }
 
-    if(status === 401) {
-      msg = '身份过期，请重新登录';
+    switch (status) {
+      case 401:
+        msg = '身份过期，请重新登录';
+        break;
+      case 404:
+        msg = 'Not Found';
+        break;
     }
 
     response
       .status(isHttpException ? 200 : status)
       .json({
-        code:status,
-        msg
+        msg,
+        code:status
       })
   }
 }

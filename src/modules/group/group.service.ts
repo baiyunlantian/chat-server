@@ -94,15 +94,16 @@ export class GroupService {
   async getGroupMessages(param) {
     const { current, pageSize, groupId } = param;
     const list = await this.groupMessageRepository.find({
+      where:{groupId},
       skip:(current-1) * pageSize,
-      take:pageSize,
-      where:{groupId}
+      take:pageSize
     })
 
     return {
       data:{
         list,
         pagination:{
+          hasNext:list.length === pageSize,
           pageNum:current,
           pageSize
         }
